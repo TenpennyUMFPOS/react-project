@@ -1,28 +1,32 @@
 const express = require("express");
-require("dotenv").config();
-const cors = require("cors");
-const bodyParser = require("body-parser");
-
-
 const app = express();
-app.use(cors());
-app.use(bodyParser.json());
+require('dotenv').config();
+const bodyparser = require("body-parser");
+const cors = require('cors');
+
 
 const {
     sequelize,
     connectToDatabase,
-} = require("./helpers/connect-to-database");
+} = require('./helpers/connect-to-database');
 connectToDatabase();
-sequelize.sync({});
+sequelize.sync({})
 
+app.use(cors());
+app.use(bodyparser.json());
+/* --- USER ROUTES ----*/
+const userRoutes = require("./routes/user-routes");
+app.use(userRoutes);
 
+/* --- Auth ROUTES ----*/
+const authRoutes = require("./routes/auth-routes");
+app.use(authRoutes);
 
-const userRoutes = require("./routes/user.routes");
-const authRoutes = require("./routes/auth.routes");
+/* --- Card ROUTES ----*/
+const cardRoutes = require("./routes/card-routes");
+app.use(cardRoutes);
 
-app.use("/api/user", userRoutes);
-app.use("/api/auth", authRoutes);
 
 app.listen(process.env.PORT, () => {
-    console.log(`application running on port ${process.env.PORT}`);
-});
+    console.log(`Server running at ${process.env.PORT}`)
+})

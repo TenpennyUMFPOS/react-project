@@ -1,41 +1,37 @@
-const { Model, DataTypes } = require("sequelize");
+const { DataTypes, Model } = require('sequelize');
+const sequelize = require('../helpers/connect-to-database').sequelize;
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const salt = bcrypt.genSaltSync(saltRounds);
-const sequelize = require("../helpers/connect-to-database").sequelize;
+
+
 
 class User extends Model { }
-
 User.init(
     {
         id: {
             type: DataTypes.INTEGER,
             autoIncrement: true,
-            primaryKey: true,
+            primaryKey: true
         },
-        firstName: {
+        username:
+        {
             type: DataTypes.STRING,
-            allowNull: false,
-        },
-        lastName: {
-            type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: false
         },
         email: {
             type: DataTypes.STRING,
-            allowNull: false,
-            unique: true,
+            allowNull: false
         },
-        password: {
+        password:
+        {
             type: DataTypes.STRING,
-            allowNull: false,
-        },
+            allowNull: false
+        }
     },
     {
         sequelize,
-        tableName: "users",
-        paranoid: true,
-        timestamps: true,
+        tableName: 'users'
     }
 );
 
@@ -43,11 +39,11 @@ User.addHook("beforeSave", async (user, options) => {
     user.password = bcrypt.hashSync(user.password, salt);
 });
 
-User.prototype.checkPassword = async function (password) {
-    return await bcrypt.compare(password, this.password);
+User.prototype.checkPassword = function (password) {
+    return bcrypt.compareSync(password, this.password);
 };
 
 
-module.exports = User;
 
-// add index section to the model
+
+module.exports = User;

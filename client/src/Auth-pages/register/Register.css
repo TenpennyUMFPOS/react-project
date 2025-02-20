@@ -1,0 +1,13 @@
+.container {
+    display: flex;
+    align-items: center;
+    background-color: aqua;
+    justify-content: center;
+}
+
+.loginform {
+    display: flex;
+    flex-direction: column;
+    width: 700px;
+    align-self: center;
+}
