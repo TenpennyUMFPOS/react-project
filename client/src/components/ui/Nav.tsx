@@ -19,6 +19,12 @@ function Nav() {
 
             </a >
 
+            < a href="/descussion" >
+
+                <h2 className='m-4 font-monospace font-extrabold text-white hover:text-green hover:cursor-pointer hover:border-b-2'>Descussion</h2>
+
+            </a >
+
             <LogoutButton />
         </div >
     )

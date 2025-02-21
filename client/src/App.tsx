@@ -10,6 +10,7 @@ import Nav from './components/ui/Nav.tsx';
 import CardsPage from './pages/cards/CardsPage.tsx';
 import LandingPage from './pages/landing/LandingPage.tsx';
 import './App.css';
+import Descussions from './pages/cards/Descussions.tsx';
 
 const AppRoutes = () => {
   const location = useLocation();
@@ -27,6 +28,7 @@ const AppRoutes = () => {
         <PrivateRoute path="/Cards" component={CardsPage} />
         <PrivateRoute path="/addCard" component={AddCard} />
         <PrivateRoute path="/store" component={FavoriteCards} />
+        <PrivateRoute path="/descussion" component={Descussions} />
         <PrivateRoute path="/card-details/:cardId" component={CardDetails} />
       </Switch>
     </>
