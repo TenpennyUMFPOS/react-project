@@ -4,6 +4,7 @@ require('dotenv').config();
 const bodyparser = require("body-parser");
 const cors = require('cors');
 
+app.use('/uploads', express.static('uploads'));
 
 const {
     sequelize,

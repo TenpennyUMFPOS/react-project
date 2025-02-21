@@ -26,6 +26,11 @@ Card.init(
             type: DataTypes.STRING,
             allowNull: false,
         },
+        isFavorite: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false
+        },
         imgUrl: {
             type: DataTypes.STRING,
             allowNull: true,

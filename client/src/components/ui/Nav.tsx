@@ -15,7 +15,7 @@ function Nav() {
             </a >
             < a href="/store" >
 
-                <h2 className='m-4 font-monospace font-extrabold text-white hover:text-green hover:cursor-pointer hover:border-b-2'>Gallery</h2>
+                <h2 className='m-4 font-monospace font-extrabold text-white hover:text-green hover:cursor-pointer hover:border-b-2'>Favorites</h2>
 
             </a >
 

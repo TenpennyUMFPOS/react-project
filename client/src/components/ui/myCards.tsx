@@ -5,6 +5,7 @@ import decoy from "../../assets/images/decoy.png";
 import Nav from './Nav.tsx';
 
 interface Card {
+    imgUrl: string | undefined;
     id: number;
     name: string;
     type: string;
@@ -56,7 +57,7 @@ export default function MyCards() {
                     {myCards.map((card) => (
                         <div key={card.id} className='w-[250px] h-[500px] border-2 border-white rounded-lg flex flex-col'>
                             <div className='  h-4/6 relative rounded-[5px] '>
-                                <img className='border-b-2 border-b-white' src={myImages[card.id - 1] || decoy} alt="" />
+                                <img className='border-b-2 border-b-white' src={`http://localhost:3000/${card.imgUrl}`} alt={card.name} />
                                 <div className=' rounded-[100%] border-2 border-golden bg-white w-[50px] h-[50px] absolute top-2 left-2
                              flex items-center justify-center text-white text-[38px] font-monospace font-bold  '>
                                     <h1 className='text-black'>{card.strength}</h1>

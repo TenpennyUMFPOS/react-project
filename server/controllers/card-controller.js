@@ -1,60 +1,76 @@
 const Card = require('../models/card');
+const multer = require('multer');
+const path = require('path');
 
-async function addCard(req, res) {
+// Set up storage for uploaded images
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'uploads/'); // Ensure the "uploads" folder exists
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + path.extname(file.originalname)); // e.g. "1629384759123.jpg"
+    },
+});
+
+const upload = multer({ storage });
+
+// Add a new card with an image
+const addCard = async (req, res) => {
     try {
+        const imgUrl = req.file ? req.file.path.replace(/\\/g, "/") : null; // Ensure forward slashes
         const { name, type, strength, description, userId } = req.body;
 
-        if (!userId) {
-            return res.status(400).json({ message: "User ID is required" });
-        }
-
-        // Check if the card already exists
-        const existingCard = await Card.findOne({ where: { name } });
-        if (existingCard) {
-            return res.status(409).json({ message: "Card already exists" });
-        }
-
-        // Create a new card
-        const newCard = await Card.create({
+        const card = await Card.create({
             name,
             type,
             strength,
             description,
-            userId
+            userId,
+            imgUrl, // Store correctly formatted path
         });
 
-        // Log the created card
-        console.log("New card created:", newCard);
-
-        return res.status(201).json({ message: "Card created successfully", card: newCard });
+        res.json(card);
     } catch (error) {
         console.error("Error in creating card:", error);
-        return res.status(500).json({ message: "Error in creating card", error: error.message });
+        res.status(500).json({ message: "Error creating card", error });
     }
-}
+};
 
-
-async function getAllCards(req, res) {
+// Fetch all cards
+const getAllCards = async (req, res) => {
     try {
         const cards = await Card.findAll();
-        return res.status(200).json(cards)
+        res.json(cards);
     } catch (error) {
-        return res.status(500).json({ message: "error in retreiving cards" });
+        console.error("Error fetching cards:", error);
+        res.status(500).json({ message: "Error fetching cards", error });
     }
-}
+};
 
-async function getUserCards(req, res) {
-    const userId = req.params.UserId;
-
+// Fetch cards for a specific user
+const getUserCards = async (req, res) => {
     try {
-        const cards = await Card.findAll({ where: { userId: userId } });
-        return res.status(200).json(cards);
+        const { UserId } = req.params;
+        const userCards = await Card.findAll({ where: { userId: UserId } });
+        res.json(userCards);
     } catch (error) {
-        return res.status(500).json({ message: "Error in retrieving cards" });
+        console.error("Error fetching user cards:", error);
+        res.status(500).json({ message: "Error fetching user cards", error });
+    }
+};
+
+const addToFavorites = async (req, res) => {
+    try {
+        const cardId = parseInt(req.params.cardId, 10);
+        const card = await Card.findOne({ where: { id: cardId } });
+        console.log("======>", card);
+        card.set({ isFavorite: !card.isFavorite });
+        await card.save();
+        res.status(200).json({ card });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Error changing to favs", error });
     }
 }
 
-
-
-
-module.exports = ({ addCard, getAllCards, getUserCards })
+module.exports = { addCard, getAllCards, getUserCards, upload, addToFavorites };
