@@ -28,6 +28,10 @@ const cardRoutes = require("./routes/card-routes");
 app.use(cardRoutes);
 
 
+/* --- Card ROUTES ----*/
+const commentRoutes = require("./routes/comment-routes");
+app.use(commentRoutes);
+
 app.listen(process.env.PORT, () => {
     console.log(`Server running at ${process.env.PORT}`)
 })

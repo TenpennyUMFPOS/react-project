@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom'; // Import Link for navigation
 import Nav from './Nav.tsx';
 
 interface Card {
@@ -93,7 +94,10 @@ export default function MyCards() {
                                 </button>
                             </div>
                             <div className='text-white font-monospace flex flex-col items-center mt-10 w-[240px] h-[120px] relative self-center'>
-                                <h1 className='text-white font-extrabold text-[30px]'>{card.name}</h1>
+                                {/* Wrap the card name in a Link */}
+                                <Link to={`/card-details/${card.id}`} className='text-white font-extrabold text-[30px]'>
+                                    {card.name}
+                                </Link>
                                 <h1 className='mt-5'>{card.description}</h1>
                             </div>
                         </div>

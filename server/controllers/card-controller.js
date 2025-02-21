@@ -1,6 +1,7 @@
 const Card = require('../models/card');
 const multer = require('multer');
 const path = require('path');
+const User = require('../models/user');
 
 // Set up storage for uploaded images
 const storage = multer.diskStorage({
@@ -96,6 +97,21 @@ const getFavCards = async (req, res) => {
         res.status(500).json({ message: "Error fetching favs", error });
     }
 };
+const getCardById = async (req, res) => {
+    try {
+        const cardId = req.params.cardId;
+        console.log("Looking for card with ID:", cardId);
+        const card = await Card.findOne({ where: { id: cardId }, include: [{ model: User }] });
+        if (!card) {
+            return res.status(404).json({ message: "Card not found" });
+        }
+        res.status(200).json(card);
+    } catch (error) {
+        console.error("Error fetching card:", error);
+        res.status(500).json({ message: "Error fetching card", error });
+    }
+};
 
 
-module.exports = { addCard, getAllCards, getUserCards, upload, addToFavorites, getFavCards };
+
+module.exports = { addCard, getAllCards, getUserCards, upload, addToFavorites, getFavCards, getCardById };

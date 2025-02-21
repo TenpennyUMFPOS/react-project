@@ -8,5 +8,6 @@ router.get("/getCards", cardController.getAllCards);
 router.get("/cards/:UserId", cardController.getUserCards);
 router.put("/cards/favorite/:cardId", cardController.addToFavorites);
 router.get("/cards/favorites/:userId", cardController.getFavCards);
+router.get("/card/:cardId", cardController.getCardById);
 
 module.exports = router;

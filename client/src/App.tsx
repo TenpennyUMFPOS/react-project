@@ -10,6 +10,7 @@ import PrivateRoute
 import myCards from './components/ui/myCards.tsx';
 import AddCard from './components/add-card/AddCard.tsx';
 import Store from './components/store/Store.tsx';
+import CardDetails from './components/cardDetails/CardDetails.tsx';
 function App() {
 
   return (
@@ -21,6 +22,7 @@ function App() {
         <PrivateRoute path="/Cards" component={myCards} />
         <PrivateRoute path="/addCard" component={AddCard} />
         <PrivateRoute path="/store" component={Store} />
+        <PrivateRoute path="/card-details/:cardId" component={CardDetails} /> {/* Add route for CardDetails */}
 
 
       </Switch>
