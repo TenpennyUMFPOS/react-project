@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Nav from "../../components/ui/Nav.tsx";
 import { useHistory } from "react-router-dom";
 
 function AddCard() {
@@ -9,6 +8,11 @@ function AddCard() {
     const [description, setQuote] = useState('');
     const [image, setImage] = useState(null); // state for the file
     const [error, setError] = useState('');
+    const [nameError, setNameError] = useState('');
+    const [typeError, setTypeError] = useState('');
+    const [strengthError, setStrengthError] = useState('');
+    const [descriptionError, setDescriptionError] = useState('');
+    const [imageError, setImageError] = useState('');
 
     const history = useHistory();
 
@@ -16,8 +20,55 @@ function AddCard() {
         setImage(e.target.files[0]);
     };
 
+    const validateForm = () => {
+        let valid = true;
+
+        // Clear previous errors
+        setNameError('');
+        setTypeError('');
+        setStrengthError('');
+        setDescriptionError('');
+        setImageError('');
+
+        // Validate name
+        if (!name) {
+            setNameError('Card Name is required');
+            valid = false;
+        }
+
+        // Validate type
+        if (!type) {
+            setTypeError('Card Type is required');
+            valid = false;
+        }
+
+        // Validate strength
+        if (!strength) {
+            setStrengthError('Power is required');
+            valid = false;
+        }
+
+
+        // Validate description
+        if (!description) {
+            setDescriptionError('Description is required');
+            valid = false;
+        }
+
+        // Validate image
+        if (!image) {
+            setImageError('Image is required');
+            valid = false;
+        }
+
+        return valid;
+    };
+
     const handleSubmit = async (event) => {
         event.preventDefault();
+
+        if (!validateForm()) return;
+
         const userId = localStorage.getItem('userId') || '';
         console.log("User id:", userId);
 
@@ -35,7 +86,6 @@ function AddCard() {
 
             const response = await fetch('http://localhost:3000/addCard', {
                 method: 'POST',
-                // Do not set the Content-Type header manually for FormData.
                 body: formData,
             });
 
@@ -55,8 +105,6 @@ function AddCard() {
 
     return (
         <div className='h-screen w-full bg-black flex flex-col'>
-
-
             <div className="relative z-50">
                 <div className="bg-black text-white flex min-h-screen flex-col items-center sm:justify-center">
                     <div className="relative mb-40 w-full max-w-lg sm:mt-10">
@@ -79,7 +127,9 @@ function AddCard() {
                                                 <input type="text" name="cardName" placeholder="Card Name" value={name} onChange={(e) => setCardName(e.target.value)} className="block w-full border-0 bg-transparent p-0 text-sm placeholder:text-muted-foreground/90 focus:outline-none focus:ring-0 sm:leading-7 text-foreground" />
                                             </div>
                                         </div>
+                                        {nameError && <p className="text-red text-xs mt-1">{nameError}</p>}
                                     </div>
+
                                     {/* Card Type */}
                                     <div className="mt-4">
                                         <div className="group relative border focus-within:border-sky-200 px-3 pb-1.5 pt-2.5 duration-200 focus-within:ring focus-within:ring-sky-300/30">
@@ -90,7 +140,9 @@ function AddCard() {
                                                 <input type="text" name="cardType" placeholder="Card Type" value={type} onChange={(e) => setCardType(e.target.value)} className="block w-full border-0 bg-transparent p-0 text-sm placeholder:text-muted-foreground/90 focus:outline-none focus:ring-0 sm:leading-7 text-foreground" />
                                             </div>
                                         </div>
+                                        {typeError && <p className="text-red text-xs mt-1">{typeError}</p>}
                                     </div>
+
                                     {/* Power */}
                                     <div className="mt-4">
                                         <div className="group relative border focus-within:border-sky-200 px-3 pb-1.5 pt-2.5 duration-200 focus-within:ring focus-within:ring-sky-300/30">
@@ -101,7 +153,9 @@ function AddCard() {
                                                 <input type="number" name="power" placeholder="Power" value={strength} onChange={(e) => setPower(e.target.value)} className="block w-full border-0 bg-transparent p-0 text-sm placeholder:text-muted-foreground/90 focus:outline-none focus:ring-0 sm:leading-7 text-foreground" />
                                             </div>
                                         </div>
+                                        {strengthError && <p className="text-red text-xs mt-1">{strengthError}</p>}
                                     </div>
+
                                     {/* Description */}
                                     <div className="mt-4">
                                         <div className="group relative border focus-within:border-sky-200 px-3 pb-1.5 pt-2.5 duration-200 focus-within:ring focus-within:ring-sky-300/30">
@@ -112,7 +166,9 @@ function AddCard() {
                                                 <input type="text" name="quote" placeholder="Quote / Description" value={description} onChange={(e) => setQuote(e.target.value)} className="block w-full border-0 bg-transparent p-0 text-sm placeholder:text-muted-foreground/90 focus:outline-none focus:ring-0 sm:leading-7 text-foreground" />
                                             </div>
                                         </div>
+                                        {descriptionError && <p className="text-red text-xs mt-1">{descriptionError}</p>}
                                     </div>
+
                                     {/* Image File */}
                                     <div className="mt-4">
                                         <div className="group relative border focus-within:border-sky-200 px-3 pb-1.5 pt-2.5 duration-200 focus-within:ring focus-within:ring-sky-300/30">
@@ -123,10 +179,12 @@ function AddCard() {
                                                 <input type="file" name="image" onChange={handleFileChange} accept="image/*" className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-accent" />
                                             </div>
                                         </div>
+                                        {imageError && <p className="text-red text-xs mt-1">{imageError}</p>}
                                     </div>
+
                                     {/* Submit */}
                                     <div className="mt-4 flex items-center justify-end gap-x-2">
-                                        <button className="font-semibold hover:bg-black hover:text-white hover:ring hover:ring-purple-500 transition duration-300 inline-flex items-center justify-center text-sm bg-white text-black h-10 px-4 py-2" type="submit"> Add Card</button>
+                                        <button className="font-semibold hover:bg-black hover:text-white hover:ring hover:ring-purple-500 transition duration-300 inline-flex items-center justify-center text-sm bg-white text-black h-10 px-4 py-2" type="submit">Add Card</button>
                                     </div>
                                 </form>
                             </div>

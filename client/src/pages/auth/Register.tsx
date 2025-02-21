@@ -2,20 +2,53 @@ import React, { useState } from 'react';
 import './Register.css';
 import { useHistory } from 'react-router-dom';
 
-
 function Register() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [username, setUsername] = useState('');
     const [error, setError] = useState(null);
+    const [emailError, setEmailError] = useState('');
+    const [passwordError, setPasswordError] = useState('');
+    const [usernameError, setUsernameError] = useState('');
     const history = useHistory();
+
+    const validateForm = () => {
+        let valid = true;
+        setEmailError('');
+        setPasswordError('');
+        setUsernameError('');
+
+        if (!email) {
+            setEmailError('Email is required');
+            valid = false;
+        } else if (!/^[^\s@]+@[^\s@]+$/.test(email)) {
+            setEmailError('Invalid email format');
+            valid = false;
+        }
+
+        if (!password) {
+            setPasswordError('Password is required');
+            valid = false;
+        } else if (password.length < 6) {
+            setPasswordError('Password must be at least 6 characters');
+            valid = false;
+        }
+
+        if (!username) {
+            setUsernameError('Username is required');
+            valid = false;
+        }
+
+        return valid;
+    };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        try {
-            let item = { username, email, password }
+        if (!validateForm()) return;
 
+        try {
+            let item = { username, email, password };
 
             const response = await fetch("http://localhost:3000/register", {
                 method: 'POST',
@@ -27,15 +60,14 @@ function Register() {
 
             if (!response.ok) {
                 const errorData = await response.json();
-                throw new Error(errorData.message || 'register failed');
+                throw new Error(errorData.message || 'Register failed');
             }
             const userData = await response.json();
-            console.log('register successful', userData); // Remove this after testing
-            history.push('/Cards')
-
+            console.log('Register successful', userData); // Remove this after testing
+            history.push('/Cards');
 
         } catch (error) {
-            setError(error.message || 'register failed catch block');
+            setError(error.message || 'Register failed (catch block)');
         }
     }
 
@@ -44,9 +76,9 @@ function Register() {
             <a href="#">
                 <div className="text-foreground font-semibold text-2xl tracking-tighter mx-auto flex items-center gap-2">
                     <div>
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
                             stroke="currentColor" className="w-6 h-6">
-                            <path stroke-linecap="round" stroke-linejoin="round"
+                            <path strokeLinecap="round" strokeLinejoin="round"
                                 d="M15.042 21.672 13.684 16.6m0 0-2.51 2.225.569-9.47 5.227 7.917-3.286-.672Zm-7.518-.267A8.25 8.25 0 1 1 20.25 10.5M8.288 14.212A5.25 5.25 0 1 1 17.25 10.5" />
                         </svg>
                     </div>
@@ -74,18 +106,11 @@ function Register() {
                                         <div className="flex justify-between">
                                             <label
                                                 className="text-xs font-medium text-muted-foreground group-focus-within:text-white text-gray-400">Username</label>
-                                            <div className="absolute right-3 translate-y-2 text-green-200">
-                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                                                    fill="currentColor" className="w-6 h-6">
-                                                    <path fill-rule="evenodd"
-                                                        d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z"
-                                                        clip-rule="evenodd" />
-                                                </svg>
-                                            </div>
                                         </div>
                                         <input type="text" name="Username" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} className="block w-full border-0 bg-transparent p-0 text-sm file:my-1 file:rounded-full file:border-0 file:bg-accent file:px-4 file:py-2 file:font-medium placeholder:text-muted-foreground/90 focus:outline-none focus:ring-0 sm:leading-7 text-foreground" />
                                     </div>
                                 </div>
+                                {usernameError && <p className="text-red text-xs mt-1">{usernameError}</p>}
                             </div>
 
                             <div className="mt-4">
@@ -101,6 +126,7 @@ function Register() {
                                                 className="block w-full border-0 bg-transparent p-0 text-sm file:my-1 placeholder:text-muted-foreground/90 focus:outline-none focus:ring-0 focus:ring-teal-500 sm:leading-7 text-foreground" />
                                         </div>
                                     </div>
+                                    {emailError && <p className="text-red text-xs mt-1">{emailError}</p>}
                                 </div>
                             </div>
 
@@ -118,17 +144,10 @@ function Register() {
                                                 className="block w-full border-0 bg-transparent p-0 text-sm file:my-1 placeholder:text-muted-foreground/90 focus:outline-none focus:ring-0 focus:ring-teal-500 sm:leading-7 text-foreground" />
                                         </div>
                                     </div>
+                                    {passwordError && <p className="text-red text-xs mt-1">{passwordError}</p>}
                                 </div>
                             </div>
-                            <div className="mt-4 flex items-center justify-between">
-                                <label className="flex items-center gap-2">
-                                    <input type="checkbox" name="remember"
-                                        className="outline-none focus:outline focus:outline-sky-300" />
-                                    <span className="text-xs">Remember me</span>
-                                </label>
-                                <a className="text-sm font-medium text-foreground underline" href="/#">Forgot
-                                    password?</a>
-                            </div>
+                            {error && <p className="text-red text-xs mt-1">{error}</p>}
                             <div className="mt-4 flex items-center justify-end gap-x-2">
 
                                 <button
@@ -143,4 +162,4 @@ function Register() {
     );
 }
 
-export default Register
+export default Register;
