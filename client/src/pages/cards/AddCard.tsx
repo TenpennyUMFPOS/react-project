@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Nav from "../ui/Nav.tsx";
+import Nav from "../../components/ui/Nav.tsx";
 import { useHistory } from "react-router-dom";
 
 function AddCard() {

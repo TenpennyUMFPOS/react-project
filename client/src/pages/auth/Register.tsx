@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import './Register.css';
 import { useHistory } from 'react-router-dom';
-import { testPasswordStrength } from './passwordStrength.tsx';
 
 
 function Register() {
@@ -16,8 +15,7 @@ function Register() {
 
         try {
             let item = { username, email, password }
-            const strength = testPasswordStrength(password);
-            console.log('password  strength ==> ', strength);
+
 
             const response = await fetch("http://localhost:3000/register", {
                 method: 'POST',

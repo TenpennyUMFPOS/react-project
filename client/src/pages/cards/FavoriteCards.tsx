@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import Nav from '../ui/Nav.tsx';
-import Card from '../ui/Card.tsx';
+import Nav from '../../components/ui/Nav.tsx';
+import Card from '../../components/ui/Card.tsx';
 
 interface Card {
     id: number;
@@ -14,7 +14,7 @@ interface Card {
     UserId: number;
 }
 
-function Store() {
+function FavoriteCards() {
     const [favoriteCards, setFavoriteCards] = useState<Card[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -70,4 +70,4 @@ function Store() {
     );
 }
 
-export default Store;
+export default FavoriteCards;

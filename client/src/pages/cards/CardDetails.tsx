@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import Nav from '../ui/Nav.tsx';
+import Nav from '../../components/ui/Nav.tsx';
 
 interface User {
     username: string;
@@ -107,7 +107,6 @@ function CardDetails() {
 
     return (
         <div className="h-full w-full bg-black flex flex-col font-monospace">
-            <Nav />
             {card ? (
                 <div className="flex flex-row gap-10 p-10">
                     {/* Left side: Owner's name and Card details */}

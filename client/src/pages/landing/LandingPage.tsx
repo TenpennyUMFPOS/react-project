@@ -4,12 +4,11 @@ import Nav from '../../components/ui/Nav.tsx';
 
 
 
-export default function TestComp() {
+export default function LandingPage() {
 
 
     return (
         <div className='h-screen w-full bg-black flex flex-col justify-between'>
-            <Nav />
 
             <div className='flex justify-center items-center self-center mb-80 '>
                 <h1 className='text-white text-[100px] font-extrabold  font-monospace'>Welcome and all !!</h1>
