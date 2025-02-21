@@ -59,7 +59,7 @@ export default function MyCards() {
     };
 
     return (
-        <div className='h-screen w-full bg-black flex flex-col'>
+        <div className='min-h-screen h-full w-full bg-black flex flex-col'>
             <Nav />
             {loading && (
                 <div className='flex justify-center items-center self-center mt-36'>
@@ -72,7 +72,7 @@ export default function MyCards() {
                 </div>
             )}
             {!loading && myCards.length > 0 && (
-                <div className='self-center flex flex-col md:flex-row gap-10 mt-10'>
+                <div className='self-center grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 mt-10 mb-10'>
                     {myCards.map((card) => (
                         <div key={card.id} className='w-[250px] h-[500px] border-2 border-white rounded-lg flex flex-col'>
                             <div className='h-4/6 relative rounded-[5px]'>

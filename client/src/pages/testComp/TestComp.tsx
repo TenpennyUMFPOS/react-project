@@ -12,7 +12,7 @@ export default function TestComp() {
             <Nav />
 
             <div className='flex justify-center items-center self-center mb-80 '>
-                <h1 className='text-white text-[100px] font-extrabold  font-monospace'>Welcome and that !!</h1>
+                <h1 className='text-white text-[100px] font-extrabold  font-monospace'>Welcome and all !!</h1>
             </div>
         </div>
     )
