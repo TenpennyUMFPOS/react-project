@@ -7,5 +7,6 @@ router.post("/addCard", cardController.upload.single('image'), cardController.ad
 router.get("/getCards", cardController.getAllCards);
 router.get("/cards/:UserId", cardController.getUserCards);
 router.put("/cards/favorite/:cardId", cardController.addToFavorites);
+router.get("/cards/favorites/:userId", cardController.getFavCards);
 
 module.exports = router;

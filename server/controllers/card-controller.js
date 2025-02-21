@@ -73,4 +73,29 @@ const addToFavorites = async (req, res) => {
     }
 }
 
-module.exports = { addCard, getAllCards, getUserCards, upload, addToFavorites };
+
+const getFavCards = async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        if (!userId) {
+            return res.status(400).json({ message: "User ID is required" });
+        }
+
+        const favCards = await Card.findAll({
+            where: {
+                isFavorite: true,
+                userId: userId
+            }
+        });
+        console.log(favCards);
+
+
+        res.status(200).json(favCards);
+    } catch (error) {
+        console.error("Error fetching favorite cards:", error);
+        res.status(500).json({ message: "Error fetching favs", error });
+    }
+};
+
+
+module.exports = { addCard, getAllCards, getUserCards, upload, addToFavorites, getFavCards };
