@@ -7,32 +7,39 @@ const createComment = async (req, res) => {
         const { cardId } = req.params;
         const { userId, comment } = req.body;
 
-        // Check if the card exists
+        if (!cardId || isNaN(cardId)) {
+            return res.status(400).json({ message: "Invalid or missing card ID" });
+        }
+        if (!userId || isNaN(userId)) {
+            return res.status(400).json({ message: "Invalid or missing user ID" });
+        }
+        if (!comment || typeof comment !== "string" || comment.trim() === "") {
+            return res.status(400).json({ message: "Comment cannot be empty" });
+        }
+
         const card = await Card.findByPk(cardId);
         if (!card) {
             return res.status(404).json({ message: 'Card not found' });
         }
 
-        // Create the comment
         const newComment = await Comment.create({
             comment,
             userId,
             cardId
         });
 
-        // Fetch the new comment with the associated User data
         const commentWithUser = await Comment.findOne({
             where: { id: newComment.id },
             include: [{
-                model: User, // Include the user who posted the comment
-                attributes: ['username'] // Ensure only the username is fetched
+                model: User,
+                attributes: ['username']
             }]
         });
 
-        return res.status(201).json(commentWithUser); // Return the comment with the User data
+        return res.status(201).json(commentWithUser);
     } catch (error) {
         console.error("Error creating comment:", error);
-        return res.status(500).json({ message: "Error creating comment", error });
+        return res.status(500).json({ message: "Error creating comment", error: error.message });
     }
 };
 
@@ -40,16 +47,19 @@ const getCommentsForCard = async (req, res) => {
     try {
         const cardId = req.params.cardId;
 
-        // Fetch the comments related to the specific card, including the associated user
+        if (!cardId || isNaN(cardId)) {
+            return res.status(400).json({ message: "Invalid or missing card ID" });
+        }
+
         const comments = await Comment.findAll({
             where: { cardId },
             include: [
                 {
-                    model: User, // Include the user who posted the comment
-                    attributes: ['username'] // Make sure you're only fetching the username
+                    model: User,
+                    attributes: ['username']
                 }
             ],
-            order: [['createdAt', 'ASC']] // Order comments by creation date (optional)
+            order: [['createdAt', 'ASC']]
         });
 
         if (!comments.length) {
@@ -59,10 +69,9 @@ const getCommentsForCard = async (req, res) => {
         res.status(200).json(comments);
     } catch (error) {
         console.error("Error fetching comments:", error);
-        res.status(500).json({ message: "Error fetching comments", error });
+        res.status(500).json({ message: "Error fetching comments", error: error.message });
     }
 };
-
 
 module.exports = {
     createComment,

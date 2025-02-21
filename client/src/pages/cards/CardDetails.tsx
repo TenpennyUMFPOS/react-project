@@ -26,17 +26,17 @@ interface Comment {
     comment: string;
     userId: number;
     cardId: number;
-    User: User; // to get the user's name
+    User: User;
 }
 
 function CardDetails() {
     const { cardId } = useParams<{ cardId: string }>();
     const [card, setCard] = useState<Card | null>(null);
-    const [comments, setComments] = useState<Comment[]>([]); // To store the comments
-    const [newComment, setNewComment] = useState<string>(''); // For handling new comment input
-    const [isLoading, setIsLoading] = useState<boolean>(true); // Loading state
+    const [comments, setComments] = useState<Comment[]>([]);
+    const [newComment, setNewComment] = useState<string>('');
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
-    // Fetch card details
+
     useEffect(() => {
         const getCardDetails = async () => {
             try {
@@ -50,16 +50,16 @@ function CardDetails() {
         getCardDetails();
     }, [cardId]);
 
-    // Fetch comments when card details are loaded
+
     useEffect(() => {
         if (cardId) {
             const getComments = async () => {
                 try {
                     const response = await fetch(`http://localhost:3000/card/${cardId}/comments`);
                     const data = await response.json();
-                    console.log(data); // Log the response data to ensure it's an array
-                    setComments(Array.isArray(data) ? data : []); // Ensure the state is always an array
-                    setIsLoading(false); // Set loading to false once data is fetched
+                    console.log(data);
+                    setComments(Array.isArray(data) ? data : []);
+                    setIsLoading(false);
                 } catch (error) {
                     console.error('Error fetching comments:', error);
                     setIsLoading(false);
@@ -69,11 +69,11 @@ function CardDetails() {
         }
     }, [cardId]);
 
-    // Handle comment submission
+
     const handleCommentSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        // Make sure the comment is not empty
+
         if (!newComment.trim()) {
             alert('Please enter a comment');
             return;
@@ -95,8 +95,8 @@ function CardDetails() {
 
             if (response.ok) {
                 const newCommentData = await response.json();
-                setComments((prevComments) => [...prevComments, newCommentData]); // Update the comments list
-                setNewComment(''); // Clear the comment input
+                setComments((prevComments) => [...prevComments, newCommentData]);
+                setNewComment('');
             } else {
                 console.error('Error adding comment:', response.statusText);
             }

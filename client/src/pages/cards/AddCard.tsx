@@ -6,7 +6,7 @@ function AddCard() {
     const [type, setCardType] = useState('');
     const [strength, setPower] = useState('');
     const [description, setQuote] = useState('');
-    const [image, setImage] = useState(null); // state for the file
+    const [image, setImage] = useState(null);
     const [error, setError] = useState('');
     const [nameError, setNameError] = useState('');
     const [typeError, setTypeError] = useState('');
@@ -23,39 +23,38 @@ function AddCard() {
     const validateForm = () => {
         let valid = true;
 
-        // Clear previous errors
+
         setNameError('');
         setTypeError('');
         setStrengthError('');
         setDescriptionError('');
         setImageError('');
 
-        // Validate name
         if (!name) {
             setNameError('Card Name is required');
             valid = false;
         }
 
-        // Validate type
+
         if (!type) {
             setTypeError('Card Type is required');
             valid = false;
         }
 
-        // Validate strength
+
         if (!strength) {
             setStrengthError('Power is required');
             valid = false;
         }
 
 
-        // Validate description
+
         if (!description) {
             setDescriptionError('Description is required');
             valid = false;
         }
 
-        // Validate image
+
         if (!image) {
             setImageError('Image is required');
             valid = false;
@@ -73,7 +72,7 @@ function AddCard() {
         console.log("User id:", userId);
 
         try {
-            // Create FormData and append all form fields
+
             const formData = new FormData();
             formData.append('name', name);
             formData.append('type', type);
